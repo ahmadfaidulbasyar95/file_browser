@@ -1,33 +1,69 @@
+a:hover {
+	text-decoration: none;
+}
+.no_pad {
+	padding: 0;
+}
 .ellipsis {
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
 }
+.btn {
+	border-radius: 0;
+}
 
 .go_open_dir ,
-.go_open_dir_item > div {
-	max-height: 100vh;
+.go_open_dir_item {
+	height: 100vh;
 	overflow: auto;
+	border: 1px solid #ccc;
+}
+.go_open_dir {
+	margin-bottom: 0;
+	padding-left: 5px;
 }
 .go_open_dir .list-group {
-	padding-left: 10px;
-	padding-top: 5px;
+	padding-left: 15px;
+	margin-bottom: 0;
+}
+.go_open_dir .list-group-item {
+	border: 0;
+	padding: 5px;
+}
+.go_open_dir .list-group-item:hover {
+  background: rgb(241, 241, 241);
 }
 .go_open_dir .list-group-item.active a {
 	color: white;
 }
-.go_open_dir .list-group-item a:first-child {
+.go_open_dir .list-group-item a:last-child {
 	width: calc(100% - 15px);
 	display: block;
+	margin-left: 15px;
 }
-.go_open_dir .list-group-item a:last-child {
-	position: absolute;
-	right: 15px;
+.go_open_dir .list-group-item a:first-child {
+	float: left;
+	left: 15px;
 	top: 10px;
 }
 
+.go_open_dir_item > div {
+	padding: 15px;
+}
+.go_open_dir_item > div > div {
+	max-height: 70vh;
+	overflow: auto;
+}
 .go_open_dir_item .item {
 	padding: 7.5px;
+}
+.go_open_dir_item .box-nav {
+	overflow: auto;
+	margin: 0;
+	padding: 10px;
+	border-bottom: 1px solid #ccc;
+	white-space: nowrap;
 }
 
 @media only screen and (max-width: 768px) {

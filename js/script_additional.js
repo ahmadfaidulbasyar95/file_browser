@@ -58,7 +58,7 @@ $(document).ready(function() {
 		if ($(this).find('span').length) 
 		{
 			var el_result = $(this).parents('.list-group-item').next('.list-group');
-			if ($(this).find('span.fa-plus').length) 
+			if ($(this).find('span.fa-caret-right').length) 
 			{
 				el_result.slideDown(300);
 				el_result.html('<div class="list-group-item"><h3 class="text-center"><i class="fa fa-spinner fa-spin"></i></h3></div>');
@@ -74,7 +74,7 @@ $(document).ready(function() {
 			}else {
 				el_result.slideUp(300);
 			}
-			$(this).find('span').toggleClass('fa-plus').toggleClass('fa-minus');
+			$(this).find('span').toggleClass('fa-caret-down').toggleClass('fa-caret-right');
 		}else 
 		{
 			window.history.replaceState("URL", "Title", PATH + $(this).attr('href'));

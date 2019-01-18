@@ -15,10 +15,10 @@ if (@$_POST['open_dir'])
 	{
 		?>
 		<div class="list-group-item">
-			<a href="<?php echo path_url_encode($_POST['open_dir'].'/'.$value); ?>" class="ellipsis" title="<?php echo $value; ?>"><?php echo $value; ?></a>
 			<a href="<?php echo path_url_encode($_POST['open_dir'].'/'.$value); ?>">
-				<span class="fa fa-plus"></span>
+				<span class="fa fa-caret-right"></span>
 			</a>
+			<a href="<?php echo path_url_encode($_POST['open_dir'].'/'.$value); ?>" class="ellipsis" title="<?php echo $value; ?>"><?php echo $value; ?></a>
 		</div>
 		<div class="list-group" style="display: none;"></div>
 		<?php 
@@ -28,42 +28,65 @@ if (@$_POST['open_dir_item'])
 {
 	$_POST['open_dir_item'] = path_url_decode($_POST['open_dir_item']);
 	$add_path = ($_POST['open_dir_item'] == '/') ? '' : $_POST['open_dir_item'].'/';
-	echo '<h4><a href="/">Directory</a>';
-	$open_dir_item_nav = '';
-	foreach (explode('/', $_POST['open_dir_item']) as $value) 
-	{
-		if ($value) 
+	?>
+	<h4 class="box-nav">
+		<a href="/">Directory</a>
+		<?php
+		$open_dir_item_nav = '';
+		foreach (explode('/', $_POST['open_dir_item']) as $value) 
 		{
-			if($open_dir_item_nav) {
-				$open_dir_item_nav .= '/'.$value;
-			}else{
-				$open_dir_item_nav = $value;
+			if ($value) 
+			{
+				if($open_dir_item_nav) {
+					$open_dir_item_nav .= '/'.$value;
+				}else{
+					$open_dir_item_nav = $value;
+				}
+				?>
+				<i class="fa fa-caret-right text-muted"></i>
+				<a href="<?php echo path_url_encode($open_dir_item_nav); ?>"><?php echo $value; ?></a>
+				<?php 
+			}
+		}
+		?>
+		<a href="<?php echo $output['path_url'].$_POST['open_dir_item']; ?>" class="external" target="_BLANK">
+			<i class="fa fa-external-link"></i>
+		</a>
+	</h4>
+	<div class="col-xs-12">
+		<div class="col-xs-12 no_pad">
+			<?php 
+			foreach (get_list_dir($output['path'].$_POST['open_dir_item']) as $value) 
+			{
+				?>
+				<div class="col-xs-6 col-sm-4 col-md-3 item">
+					<a href="<?php echo path_url_encode($add_path.$value); ?>" class="btn btn-default btn-block ellipsis" title="<?php echo $value; ?>"><?php echo $value; ?></a>
+				</div>
+				<?php 
 			}
 			?>
-			->
-			<a href="<?php echo path_url_encode($open_dir_item_nav); ?>"><?php echo $value; ?></a>
+		</div>
+		<div class="col-xs-12 no_pad">
+			<h4>File 
+				<a href="<?php echo path_url_encode($_POST['open_dir_item']); ?>" class="btn btn-default file_download_all">
+					<i class="fa fa-download"></i> Download Link
+				</a>
+			</h4>
+		</div>
+		<div class="col-xs-12 no_pad">
 			<?php 
-		}
-	}
-	echo ' <a href="'.$output['path_url'].$_POST['open_dir_item'].'" class="external" target="_BLANK"><i class="fa fa-external-link"></i></a></h4><div>';
-	foreach (get_list_dir($output['path'].$_POST['open_dir_item']) as $value) 
-	{
-		?>
-		<div class="col-xs-6 col-sm-4 col-md-3 item">
-			<a href="<?php echo path_url_encode($add_path.$value); ?>" class="btn btn-default btn-block ellipsis" title="<?php echo $value; ?>"><?php echo $value; ?></a>
+			foreach (get_list_file($output['path'].$_POST['open_dir_item']) as $value) 
+			{
+				?>
+				<div class="col-xs-6 col-sm-4 col-md-3 item">
+					<a href="<?php echo path_url_encode($add_path.$value); ?>" class="btn btn-default btn-block ellipsis file" title="<?php echo $value; ?>"><?php echo $value; ?></a>
+				</div>
+				<?php 
+			}
+			?>
 		</div>
-		<?php 
-	}
-	echo '</div><h4>File <a href="'.path_url_encode($_POST['open_dir_item']).'" class="btn btn-default file_download_all"><i class="fa fa-download"></i> Download All</a></h4><div>';
-	foreach (get_list_file($output['path'].$_POST['open_dir_item']) as $value) 
-	{
-		?>
-		<div class="col-xs-6 col-sm-4 col-md-3 item">
-			<a href="<?php echo path_url_encode($add_path.$value); ?>" class="btn btn-default btn-block ellipsis file" title="<?php echo $value; ?>"><?php echo $value; ?></a>
-		</div>
-		<?php 
-	}
-	echo '</div>';
+	</div>
+	<?php 
 }else
 if (isset($_POST['open_dir_item_download'])) 
 {
@@ -77,7 +100,7 @@ if (isset($_POST['open_dir_item_download']))
 					<th></th>
 					<th>
 						<button class="btn btn-default btn-block file_download_all_now" style="display: none;">
-							<i class="fa fa-download"> Download All</i>
+							<i class="fa fa-download"> Download Link</i>
 						</button>
 					</th>
 				</tr>
@@ -163,18 +186,17 @@ if (@$_POST['open_item_detail'])
 			<link rel="stylesheet" href="<?php echo $output['url']; ?>css/style_compress.css" >
 		</head>
 		<body>
-			<div class="col-xs-12 col-sm-4 col-md-3">
-				<h4>Navigation</h4>
+			<div class="col-xs-12 col-sm-4 col-md-3 no_pad">
 				<div class="list-group go_open_dir">
 					<?php 
 					foreach (get_list_dir($output['path']) as $value) 
 					{
 						?>
 						<div class="list-group-item">
-							<a href="<?php echo path_url_encode($value); ?>" class="ellipsis" title="<?php echo $value; ?>"><?php echo $value; ?></a>
 							<a href="<?php echo path_url_encode($value); ?>">
-								<span class="fa fa-plus"></span>
+								<span class="fa fa-caret-right"></span>
 							</a>
+							<a href="<?php echo path_url_encode($value); ?>" class="ellipsis" title="<?php echo $value; ?>"><?php echo $value; ?></a>
 						</div>
 						<div class="list-group" style="display: none;"></div>
 						<?php 
@@ -182,13 +204,13 @@ if (@$_POST['open_item_detail'])
 					?>
 				</div>
 			</div>
-			<div class="col-xs-12 col-sm-8 col-md-9 go_open_dir_item">
+			<div class="col-xs-12 col-sm-8 col-md-9 go_open_dir_item no_pad">
 				<?php 
 				$add_path = '';
 				if($output['path_req']) $add_path = implode('/', $output['path_req']); 
 				$add_path = path_url_decode($add_path).'/';
 				?>
-				<h4>
+				<h4 class="box-nav">
 					<a href="/">Directory</a>
 					<?php 
 					$open_dir_item_nav = '';
@@ -202,38 +224,48 @@ if (@$_POST['open_item_detail'])
 								$open_dir_item_nav = $value;
 							}
 							?>
-							->
+							<i class="fa fa-caret-right text-muted"></i>
 							<a href="<?php echo path_url_encode($open_dir_item_nav); ?>"><?php echo $value; ?></a>
 							<?php 
 						}
 					}
 					?>
-					<a href="<?php echo $output['path_url'].$add_path; ?>" class="external" target="_BLANK"><i class="fa fa-external-link"></i></a>
+					<a href="<?php echo $output['path_url'].$add_path; ?>" class="external" target="_BLANK">
+						<i class="fa fa-external-link"></i>
+					</a>
 				</h4>
-				<div>
-					<?php 
-					foreach (get_list_dir($output['path'].$add_path) as $value) 
-					{
-						?>
-						<div class="col-xs-6 col-sm-4 col-md-3 item">
-							<a href="<?php echo path_url_encode($add_path.$value); ?>" class="btn btn-default btn-block ellipsis" title="<?php echo $value; ?>"><?php echo $value; ?></a>
-						</div>
+				<div class="col-xs-12">
+					<div class="col-xs-12 no_pad">
 						<?php 
-					}
-					?>
-				</div>
-				<h4>File <a href="<?php echo path_url_encode($add_path); ?>" class="btn btn-default file_download_all"><i class="fa fa-download"></i> Download All</a></h4>
-				<div>
-					<?php 
-					foreach (get_list_file($output['path'].$add_path) as $value) 
-					{
+						foreach (get_list_dir($output['path'].$add_path) as $value) 
+						{
+							?>
+							<div class="col-xs-6 col-sm-4 col-md-3 item">
+								<a href="<?php echo path_url_encode($add_path.$value); ?>" class="btn btn-default btn-block ellipsis" title="<?php echo $value; ?>"><?php echo $value; ?></a>
+							</div>
+							<?php 
+						}
 						?>
-						<div class="col-xs-6 col-sm-4 col-md-3 item">
-							<a href="<?php echo path_url_encode($add_path.$value); ?>" class="btn btn-default btn-block ellipsis file" title="<?php echo $value; ?>"><?php echo $value; ?></a>
-						</div>
+					</div>
+					<div class="col-xs-12 no_pad">
+						<h4>File 
+							<a href="<?php echo path_url_encode($add_path); ?>" class="btn btn-default file_download_all">
+								<i class="fa fa-download"></i> Download Link
+							</a>
+						</h4>
+					</div>
+					<div class="col-xs-12 no_pad">
 						<?php 
-					}
-					?>
+						foreach (get_list_file($output['path'].$add_path) as $value) 
+						{
+							?>
+							<div class="col-xs-6 col-sm-4 col-md-3 item">
+								<a href="<?php echo path_url_encode($add_path.$value); ?>" class="btn btn-default btn-block ellipsis file" title="<?php echo $value; ?>"><?php echo $value; ?></a>
+							</div>
+							<?php 
+						}
+						?>
+					</div>
 				</div>
 			</div>
 			<div class="modal fade" id="modal-file_detail">
