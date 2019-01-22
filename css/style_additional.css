@@ -66,6 +66,20 @@ a:hover {
 	white-space: nowrap;
 }
 
+.form_search {
+  position: absolute;
+  top: 2px;
+  right: 0;
+  background: white;
+}
+.form_search .form-group {
+	display: inline-block;
+	margin-bottom: 0;
+}
+.form_search .form-group .form-control {
+	border: 0;
+}
+
 @media only screen and (max-width: 768px) {
 	.go_open_dir {
 		max-height: 50vh;

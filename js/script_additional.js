@@ -1,4 +1,30 @@
 $(document).ready(function() {
+	$('body').on('click', '.form_search .btn', function(event) {
+		event.preventDefault();
+		var el_input = $('.form_search .form-group');
+		el_input.slideToggle(200);
+		el_input.toggleClass('active');
+		if (el_input.hasClass('active')) {
+			setTimeout(function() {
+				el_input.find('input').focus();
+			}, 500);
+		}else
+		if (el_input.find('input').val()) {
+			el_input.parents('form').submit();
+		}
+	});
+	$('body').on('submit', '.form_search', function(event) {
+		$('.go_open_dir_item').html('<h3 class="text-center"><i class="fa fa-spinner fa-spin"></i></h3>');
+		$.ajax({
+			url: PATH,
+			type: 'POST',
+			dataType: 'html',
+			data: {open_dir_item: $(this).attr('action') , keyword: $(this).find('input').val()},
+		})
+		.done(function(out) {
+			$('.go_open_dir_item').html(out);
+		});
+	});
 	$('body').on('click', '.file_download_all_now', function(event) {
 		event.preventDefault();
 		$(this).parents('.table').find('a').each(function(index, el) {

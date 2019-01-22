@@ -27,7 +27,23 @@ if (@$_POST['open_dir'])
 if (@$_POST['open_dir_item']) 
 {
 	$_POST['open_dir_item'] = path_url_decode($_POST['open_dir_item']);
-	$add_path = ($_POST['open_dir_item'] == '/') ? '' : $_POST['open_dir_item'].'/';
+	$add_path               = ($_POST['open_dir_item'] == '/') ? '' : $_POST['open_dir_item'].'/';
+	if (@$_POST['keyword']) 
+	{
+		$data_list      = search_directory($output['path'].$_POST['open_dir_item'],$_POST['keyword']);
+		$data_list_dir  = array();
+		$data_list_file = array();
+		foreach ($data_list['dir'] as $value) {
+			$data_list_dir[]  = ($_POST['open_dir_item']) ? str_replace($output['path'].$_POST['open_dir_item'].'/', '', $value) : str_replace($output['path'], '', $value);
+		}
+		foreach ($data_list['file'] as $value) {
+			$data_list_file[]  = ($_POST['open_dir_item']) ? str_replace($output['path'].$_POST['open_dir_item'].'/', '', $value) : str_replace($output['path'], '', $value);
+		}
+	}else
+	{
+		$data_list_dir          = get_list_dir($output['path'].$_POST['open_dir_item']);
+		$data_list_file         = get_list_file($output['path'].$_POST['open_dir_item']);
+	}
 	?>
 	<h4 class="box-nav">
 		<a href="/">Directory</a>
@@ -52,14 +68,21 @@ if (@$_POST['open_dir_item'])
 		<a href="<?php echo $output['path_url'].$_POST['open_dir_item']; ?>" class="external" target="_BLANK">
 			<i class="fa fa-external-link"></i>
 		</a>
+		<span class="text-muted">(<?php echo count($data_list_dir); ?>)</span>
 	</h4>
+	<form action="<?php echo ($_POST['open_dir_item']) ? path_url_encode($_POST['open_dir_item']):'/'; ?>" method="POST" class="form-inline form_search" role="form">
+		<div class="form-group" style="display: none;">
+			<input type="text" class="form-control" placeholder="Search">
+		</div>
+		<i class="fa fa-search btn"></i>
+	</form>
 	<div class="col-xs-12">
 		<div class="col-xs-12 no_pad">
 			<?php 
-			foreach (get_list_dir($output['path'].$_POST['open_dir_item']) as $value) 
+			foreach ($data_list_dir as $value) 
 			{
 				?>
-				<div class="col-xs-6 col-sm-4 col-md-3 item">
+				<div class="col-xs-12 col-sm-6 col-md-4 item">
 					<a href="<?php echo path_url_encode($add_path.$value); ?>" class="btn btn-default btn-block ellipsis" title="<?php echo $value; ?>"><?php echo $value; ?></a>
 				</div>
 				<?php 
@@ -71,14 +94,15 @@ if (@$_POST['open_dir_item'])
 				<a href="<?php echo path_url_encode($_POST['open_dir_item']); ?>" class="btn btn-default file_download_all">
 					<i class="fa fa-download"></i> Download Link
 				</a>
+				<span class="text-muted">(<?php echo count($data_list_file); ?>)</span>
 			</h4>
 		</div>
 		<div class="col-xs-12 no_pad">
 			<?php 
-			foreach (get_list_file($output['path'].$_POST['open_dir_item']) as $value) 
+			foreach ($data_list_file as $value) 
 			{
 				?>
-				<div class="col-xs-6 col-sm-4 col-md-3 item">
+				<div class="col-xs-12 col-sm-6 col-md-4 item">
 					<a href="<?php echo path_url_encode($add_path.$value); ?>" class="btn btn-default btn-block ellipsis file" title="<?php echo $value; ?>"><?php echo $value; ?></a>
 				</div>
 				<?php 
@@ -206,9 +230,11 @@ if (@$_POST['open_item_detail'])
 			</div>
 			<div class="col-xs-12 col-sm-8 col-md-9 go_open_dir_item no_pad">
 				<?php 
-				$add_path = '';
+				$add_path                         = '';
 				if($output['path_req']) $add_path = implode('/', $output['path_req']); 
-				$add_path = path_url_decode($add_path).'/';
+				$add_path                         = path_url_decode($add_path).'/';
+				$data_list_dir                    = get_list_dir($output['path'].$add_path);
+				$data_list_file                   = get_list_file($output['path'].$add_path);
 				?>
 				<h4 class="box-nav">
 					<a href="/">Directory</a>
@@ -233,14 +259,21 @@ if (@$_POST['open_item_detail'])
 					<a href="<?php echo $output['path_url'].$add_path; ?>" class="external" target="_BLANK">
 						<i class="fa fa-external-link"></i>
 					</a>
+					<span class="text-muted">(<?php echo count($data_list_dir); ?>)</span>
 				</h4>
+				<form action="<?php echo (path_url_encode($add_path)) ? path_url_encode($add_path) : '/'; ?>" method="POST" class="form-inline form_search" role="form">
+					<div class="form-group" style="display: none;">
+						<input type="text" class="form-control" placeholder="Search">
+					</div>
+					<i class="fa fa-search btn"></i>
+				</form>
 				<div class="col-xs-12">
 					<div class="col-xs-12 no_pad">
 						<?php 
-						foreach (get_list_dir($output['path'].$add_path) as $value) 
+						foreach ($data_list_dir as $value) 
 						{
 							?>
-							<div class="col-xs-6 col-sm-4 col-md-3 item">
+							<div class="col-xs-12 col-sm-6 col-md-4 item">
 								<a href="<?php echo path_url_encode($add_path.$value); ?>" class="btn btn-default btn-block ellipsis" title="<?php echo $value; ?>"><?php echo $value; ?></a>
 							</div>
 							<?php 
@@ -252,14 +285,15 @@ if (@$_POST['open_item_detail'])
 							<a href="<?php echo path_url_encode($add_path); ?>" class="btn btn-default file_download_all">
 								<i class="fa fa-download"></i> Download Link
 							</a>
+							<span class="text-muted">(<?php echo count($data_list_file); ?>)</span>
 						</h4>
 					</div>
 					<div class="col-xs-12 no_pad">
 						<?php 
-						foreach (get_list_file($output['path'].$add_path) as $value) 
+						foreach ($data_list_file as $value) 
 						{
 							?>
-							<div class="col-xs-6 col-sm-4 col-md-3 item">
+							<div class="col-xs-12 col-sm-6 col-md-4 item">
 								<a href="<?php echo path_url_encode($add_path.$value); ?>" class="btn btn-default btn-block ellipsis file" title="<?php echo $value; ?>"><?php echo $value; ?></a>
 							</div>
 							<?php 

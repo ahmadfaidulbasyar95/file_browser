@@ -60,7 +60,7 @@ function get_list_dir($path='')
 	$out = array();
 	foreach (scandir($path) as $value) 
 	{
-		if (!in_array($value, array('.','..','file_browser'))) {
+		if (!in_array($value, array('.','..'))) {
 			if (is_dir($path . DIRECTORY_SEPARATOR . $value)) $out[] = $value; 
 		}
 	}
@@ -72,8 +72,33 @@ function get_list_file($path='')
 	$out = array();
 	foreach (scandir($path) as $value) 
 	{
-		if (!in_array($value, array('.','..','index.php'))) {
+		if (!in_array($value, array('.','..'))) {
 			if (!is_dir($path . DIRECTORY_SEPARATOR . $value)) $out[] = $value; 
+		}
+	}
+	return $out;
+}
+
+function search_directory($path='',$keyword='')
+{
+	$out  = array('dir'=>array(),'file'=>array());
+	$path = preg_replace('~/$~m', '', $path);
+	foreach (scandir($path) as $value) 
+	{
+		if (!in_array($value, array('.','..'))) 
+		{
+			if (is_dir($path . DIRECTORY_SEPARATOR . $value)) 
+			{
+				if (strpos('/'.$value,$keyword)) $out['dir'][] = $path.'/'.$value;
+				foreach (call_user_func(__FUNCTION__,$path.'/'.$value,$keyword) as $key1 => $value1) 
+				{
+					foreach ($value1 as $value2) {
+						$out[$key1][] = $value2;
+					}
+				}
+			}else{
+				if (strpos('/'.$value,$keyword)) $out['file'][] = $path.'/'.$value;
+			}
 		}
 	}
 	return $out;
