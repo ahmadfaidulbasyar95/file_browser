@@ -59,7 +59,7 @@ if (@$_POST['open_dir_item'])
 					$open_dir_item_nav = $value;
 				}
 				?>
-				<i class="fa fa-caret-right text-muted"></i>
+				/
 				<a href="<?php echo path_url_encode($open_dir_item_nav); ?>"><?php echo $value; ?></a>
 				<?php 
 			}
@@ -250,7 +250,7 @@ if (@$_POST['open_item_detail'])
 								$open_dir_item_nav = $value;
 							}
 							?>
-							<i class="fa fa-caret-right text-muted"></i>
+							/
 							<a href="<?php echo path_url_encode($open_dir_item_nav); ?>"><?php echo $value; ?></a>
 							<?php 
 						}
