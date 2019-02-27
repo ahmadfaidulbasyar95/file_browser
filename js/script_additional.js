@@ -210,6 +210,7 @@ function tool_box_show() {
 	}
 }
 function data_refresh(data_path) {
+	if(!data_path) data_path = '/';
 	$('.go_open_dir_item').html('<h3 class="text-center"><i class="fa fa-spinner fa-spin"></i></h3>');
 	$.ajax({
 		url: PATH,
