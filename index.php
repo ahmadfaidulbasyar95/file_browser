@@ -1,13 +1,24 @@
 <?php 
 include 'function.php';
+include 'config.php';
 $output             = array();
-$output['url']      = $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'].'/file_browser/';
+$output['url']      = $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST']._URI;
 $output['root']     = dirname(__FILE__).'/';
-$output['path']     = str_replace('/file_browser', '', $output['root']);
-$output['path_url'] = str_replace('/file_browser', '', $output['url']);
-$output['path_req'] = explode('/', str_replace('/file_browser/', '', $_SERVER['REQUEST_URI']));
-if(empty(@$output['path_req'][0])) $output['path_req'] = array();
-
+$output['path']     = _PATH;
+$output['path_url'] = $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST']._PATH_URI;
+if (_URI=='/') {
+	$output['path_req'] = explode('/', @$_SERVER['REQUEST_URI']);
+}else{
+	$output['path_req'] = explode('/', str_replace(_URI, '', @$_SERVER['REQUEST_URI']));
+}
+foreach ($output['path_req'] as $key => $value) {
+	if(empty($value)) unset($output['path_req'][$key]);
+}
+$output['path_req'] = array_values($output['path_req']);
+if (@$_POST['tool_act']) 
+{
+	include 'tool_act.php';
+}else
 if (@$_POST['open_dir']) 
 {
 	$_POST['open_dir'] = path_url_decode($_POST['open_dir']);
@@ -83,7 +94,7 @@ if (@$_POST['open_dir_item'])
 			{
 				?>
 				<div class="col-xs-12 col-sm-6 col-md-4 item">
-					<a href="<?php echo path_url_encode($add_path.$value); ?>" class="btn btn-default btn-block ellipsis" title="<?php echo $value; ?>"><?php echo $value; ?></a>
+					<a href="<?php echo path_url_encode($add_path.$value); ?>" class="btn btn-default btn-block ellipsis selection" title="<?php echo $value; ?>"><?php echo $value; ?></a>
 				</div>
 				<?php 
 			}
@@ -103,13 +114,14 @@ if (@$_POST['open_dir_item'])
 			{
 				?>
 				<div class="col-xs-12 col-sm-6 col-md-4 item">
-					<a href="<?php echo path_url_encode($add_path.$value); ?>" class="btn btn-default btn-block ellipsis file" title="<?php echo $value; ?>"><?php echo $value; ?></a>
+					<a href="<?php echo path_url_encode($add_path.$value); ?>" class="btn btn-default btn-block ellipsis file selection" title="<?php echo $value; ?>"><?php echo $value; ?></a>
 				</div>
 				<?php 
 			}
 			?>
 		</div>
 	</div>
+	<div id="data_addpath"><?php echo path_url_encode($add_path); ?></div>
 	<?php 
 }else
 if (isset($_POST['open_dir_item_download'])) 
@@ -210,6 +222,31 @@ if (@$_POST['open_item_detail'])
 			<link rel="stylesheet" href="<?php echo $output['url']; ?>css/style_compress.css" >
 		</head>
 		<body>
+			<div class="tool_box col-xs-12 no_pad" style="display: none;">
+				<a href="#modal-tool-create_folder" class="tool_item btn btn-default" data-toggle="modal" title="Create Folder">
+					*<i class="fa fa-folder-o"></i>
+				</a>
+				<a href="#modal-tool-delete" class="tool_item btn btn-default" data-toggle="modal" title="Delete">
+					<i class="fa fa-trash"></i>
+				</a>
+				<a href="#modal-tool-cut" class="tool_item btn btn-default" data-toggle="modal" title="Cut">
+					<i class="fa fa-cut"></i>
+				</a>
+				<a href="#modal-tool-copy" class="tool_item btn btn-default" data-toggle="modal" title="Copy">
+					<i class="fa fa-copy"></i>
+				</a>
+				<a href="#modal-tool-rename" class="tool_item btn btn-default" data-toggle="modal" title="Rename">
+					A <i class="fa fa-angle-right"></i> B
+				</a>
+				<a href="#tool-clear_selected" class="tool_item btn btn-default" title="Clear Selected">
+					x
+				</a>
+			</div>
+			<div class="col-xs-12 tool_box_open">
+				<a href="" class="" title="Open Toolbox">
+					<i class="fa fa-chevron-down"></i>
+				</a>
+			</div>
 			<div class="col-xs-12 col-sm-4 col-md-3 no_pad">
 				<div class="list-group go_open_dir">
 					<?php 
@@ -274,7 +311,7 @@ if (@$_POST['open_item_detail'])
 						{
 							?>
 							<div class="col-xs-12 col-sm-6 col-md-4 item">
-								<a href="<?php echo path_url_encode($add_path.$value); ?>" class="btn btn-default btn-block ellipsis" title="<?php echo $value; ?>"><?php echo $value; ?></a>
+								<a href="<?php echo path_url_encode($add_path.$value); ?>" class="btn btn-default btn-block ellipsis selection" title="<?php echo $value; ?>"><?php echo $value; ?></a>
 							</div>
 							<?php 
 						}
@@ -294,11 +331,68 @@ if (@$_POST['open_item_detail'])
 						{
 							?>
 							<div class="col-xs-12 col-sm-6 col-md-4 item">
-								<a href="<?php echo path_url_encode($add_path.$value); ?>" class="btn btn-default btn-block ellipsis file" title="<?php echo $value; ?>"><?php echo $value; ?></a>
+								<a href="<?php echo path_url_encode($add_path.$value); ?>" class="btn btn-default btn-block ellipsis file selection" title="<?php echo $value; ?>"><?php echo $value; ?></a>
 							</div>
 							<?php 
 						}
 						?>
+					</div>
+				</div>
+				<div id="data_addpath"><?php echo path_url_encode($add_path); ?></div>
+			</div>
+			<div class="modal fade" id="modal-tool-create_folder">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+							<h4 class="modal-title">Create Folder</h4>
+						</div>
+						<div class="modal-body">
+							<h3 class="text-center loader" style="display: none;"><i class="fa fa-spinner fa-spin"></i></h3>
+							<form action="" method="POST" role="form">
+								<div class="form-group">
+									<label for="">Folder Name</label>
+									<input type="text" class="form-control" required="required">
+								</div>
+								<button type="submit" class="btn btn-primary">Submit</button>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal fade" id="modal-tool-rename">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+							<h4 class="modal-title">Rename</h4>
+						</div>
+						<div class="modal-body">
+							<div class="table-responsive">
+								<table class="table table-striped table-hover">
+									<tbody class="list_wrapper"></tbody>
+								</table>
+							</div>
+							<a href="" class="btn btn-info rename_btn">A <i class="fa fa-angle-right"></i> B</a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal fade" id="modal-tool-delete">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+							<h4 class="modal-title">Delete</h4>
+						</div>
+						<div class="modal-body">
+							<div class="table-responsive">
+								<table class="table table-striped table-hover">
+									<tbody class="list_wrapper"></tbody>
+								</table>
+							</div>
+							<a href="" class="btn btn-danger delete_btn"><i class="fa fa-trash"></i></a>
+						</div>
 					</div>
 				</div>
 			</div>

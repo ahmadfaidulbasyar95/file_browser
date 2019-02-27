@@ -1,0 +1,5 @@
+<?php 
+
+define('_URI', '/file_browser/');
+define('_PATH', '/var/www/html/');
+define('_PATH_URI', '/');
