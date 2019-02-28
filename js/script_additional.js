@@ -136,6 +136,10 @@ $(document).ready(function() {
 		tool_box_show();
 	});
 	$('[href="#modal-tool-cut"],[href="#modal-tool-copy"]').on('click', function(event) {
+		var elem = $(this);
+		setTimeout(function() {
+			$(elem.attr('href')+' .btn').focus();
+		}, 1000);
 		var x = '';
 		$('.go_open_dir_item .selection.selected').each(function(index, el) {
 			x += '<tr><td data-path="'+$(this).attr('href')+'">'+$(this).html()+'</td></tr>';
@@ -179,6 +183,9 @@ $(document).ready(function() {
 		});
 	});
 	$('[href="#modal-tool-rename"]').on('click', function(event) {
+		setTimeout(function() {
+			$('#modal-tool-rename .rename_btn').focus();
+		}, 1000);
 		var x = '';
 		$('.go_open_dir_item .selection.selected').each(function(index, el) {
 			x += '<tr><td><div class="form-group"><label>'+$(this).html()+'</label><input type="text" class="form-control" value="'+$(this).html()+'" placeholder="'+$(this).html()+'" data-value="'+$(this).attr('href')+'" required="required" title="'+$(this).html()+'"></div></td></tr>';
@@ -211,6 +218,9 @@ $(document).ready(function() {
 		}
 	});
 	$('[href="#modal-tool-delete"]').on('click', function(event) {
+		setTimeout(function() {
+			$('#modal-tool-delete .delete_btn').focus();
+		}, 1000);
 		var x = '';
 		$('.go_open_dir_item .selection.selected').each(function(index, el) {
 			x += '<tr><td><div class="checkbox"><label><input checked type="checkbox" value="'+$(this).attr('href')+'"> '+$(this).html()+' </label></div></td></tr>';
@@ -240,6 +250,36 @@ $(document).ready(function() {
 					}
 				});
 			});
+		}
+	});
+	$('[href="#modal-tool-create_folder"]').on('click', function(event) {
+		setTimeout(function() {
+			$('#modal-tool-create_folder input').focus();
+		}, 1000);
+	});
+	$('[href="#modal-tool-paste"]').on('click', function(event) {
+		setTimeout(function() {
+			$('#modal-tool-paste .paste_btn').focus();
+		}, 1000);
+	});
+	$('body').on('keyup', function(event) {
+		if (event.ctrlKey && event.keyCode == 67) {
+			$('[href="#modal-tool-copy"]').trigger('click');
+		}else
+		if (event.ctrlKey && event.keyCode == 88) {
+			$('[href="#modal-tool-cut"]').trigger('click');
+		}else
+		if (event.ctrlKey && event.keyCode == 86) {
+			$('[href="#modal-tool-paste"]').trigger('click');
+		}else
+		if (event.keyCode == 46) {
+			$('[href="#modal-tool-delete"]').trigger('click');
+		}else
+		if (event.keyCode == 113) {
+			$('[href="#modal-tool-rename"]').trigger('click');
+		}else
+		if (event.keyCode == 27) {
+			$('[href="#tool-clear_selected"]').trigger('click');
 		}
 	});
 });

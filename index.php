@@ -226,22 +226,22 @@ if (@$_POST['open_item_detail'])
 				<a href="#modal-tool-create_folder" class="tool_item btn btn-default" data-toggle="modal" title="Create Folder">
 					*<i class="fa fa-folder-o"></i>
 				</a>
-				<a href="#modal-tool-delete" class="tool_item btn btn-default" data-toggle="modal" title="Delete">
+				<a href="#modal-tool-delete" class="tool_item btn btn-default" data-toggle="modal" title="Delete (Del)">
 					<i class="fa fa-trash"></i>
 				</a>
-				<a href="#modal-tool-cut" class="tool_item btn btn-default" data-toggle="modal" title="Cut">
+				<a href="#modal-tool-cut" class="tool_item btn btn-default" data-toggle="modal" title="Cut (Ctrl + X)">
 					<i class="fa fa-cut"></i>
 				</a>
-				<a href="#modal-tool-copy" class="tool_item btn btn-default" data-toggle="modal" title="Copy">
+				<a href="#modal-tool-copy" class="tool_item btn btn-default" data-toggle="modal" title="Copy (Ctrl + C)">
 					<i class="fa fa-copy"></i>
 				</a>
-				<a href="#modal-tool-paste" class="tool_item btn btn-default" data-toggle="modal" title="Paste">
+				<a href="#modal-tool-paste" class="tool_item btn btn-default" data-toggle="modal" title="Paste (Ctrl + V)">
 					<i class="fa fa-paste"></i>
 				</a>
-				<a href="#modal-tool-rename" class="tool_item btn btn-default" data-toggle="modal" title="Rename">
+				<a href="#modal-tool-rename" class="tool_item btn btn-default" data-toggle="modal" title="Rename (F2)">
 					A <i class="fa fa-angle-right"></i> B
 				</a>
-				<a href="#tool-clear_selected" class="tool_item btn btn-default" title="Clear Selected">
+				<a href="#tool-clear_selected" class="tool_item btn btn-default" title="Clear Selected (Esc)">
 					x
 				</a>
 			</div>
