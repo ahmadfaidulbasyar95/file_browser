@@ -135,6 +135,49 @@ $(document).ready(function() {
 		$('.go_open_dir_item .selection.selected').removeClass('selected');
 		tool_box_show();
 	});
+	$('[href="#modal-tool-cut"],[href="#modal-tool-copy"]').on('click', function(event) {
+		var x = '';
+		$('.go_open_dir_item .selection.selected').each(function(index, el) {
+			x += '<tr><td data-path="'+$(this).attr('href')+'">'+$(this).html()+'</td></tr>';
+		});
+		$($(this).attr('href')+' .list_wrapper').html(x);
+	});
+	$('#modal-tool-cut .cut_btn,#modal-tool-copy .copy_btn').on('click', function(event) {
+		event.preventDefault();
+		if ($(this).hasClass('cut_btn')) {
+			$('#modal-tool-paste .paste_btn').data('act', 'move');
+			$('#modal-tool-paste .modal-title').html('Cut > Paste');
+		}else{
+			$('#modal-tool-paste .paste_btn').data('act', 'copy');
+			$('#modal-tool-paste .modal-title').html('Copy > Paste');
+		}
+		$('#modal-tool-paste .list_wrapper').html($(this).parents('.modal').find('.list_wrapper').html());
+		$(this).parents('.modal').find('.close').trigger('click');
+	});
+	$('#modal-tool-paste .paste_btn').on('click', function(event) {
+		event.preventDefault();
+		var paste_list = $('#modal-tool-paste .list_wrapper td').length;
+		var paste_list_count = 0;
+		var paste_btn = $(this);
+		$('#modal-tool-paste .list_wrapper td').each(function(index, el) {
+			var paste_el = $(this);
+			paste_el.append('<span class="text-info">'+paste_btn.data('act')+'ing...</span>');
+			$.ajax({
+				url: PATH,
+				type: 'POST',
+				dataType: 'html',
+				data: {tool_act: paste_btn.data('act'),addpath:paste_el.data('path'),target_path:$('#data_addpath').html()+'/'},
+			})
+			.done(function(out) {
+				paste_el.parents('tr').remove();
+				paste_list_count++;
+				if (paste_list==paste_list_count) {
+					$('#modal-tool-paste .close').trigger('click');
+					data_refresh($('#data_addpath').html());
+				}
+			});
+		});
+	});
 	$('[href="#modal-tool-rename"]').on('click', function(event) {
 		var x = '';
 		$('.go_open_dir_item .selection.selected').each(function(index, el) {

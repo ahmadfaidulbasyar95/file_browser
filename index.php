@@ -235,6 +235,9 @@ if (@$_POST['open_item_detail'])
 				<a href="#modal-tool-copy" class="tool_item btn btn-default" data-toggle="modal" title="Copy">
 					<i class="fa fa-copy"></i>
 				</a>
+				<a href="#modal-tool-paste" class="tool_item btn btn-default" data-toggle="modal" title="Paste">
+					<i class="fa fa-paste"></i>
+				</a>
 				<a href="#modal-tool-rename" class="tool_item btn btn-default" data-toggle="modal" title="Rename">
 					A <i class="fa fa-angle-right"></i> B
 				</a>
@@ -392,6 +395,60 @@ if (@$_POST['open_item_detail'])
 								</table>
 							</div>
 							<a href="" class="btn btn-danger delete_btn"><i class="fa fa-trash"></i></a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal fade" id="modal-tool-cut">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+							<h4 class="modal-title">Cut</h4>
+						</div>
+						<div class="modal-body">
+							<div class="table-responsive">
+								<table class="table table-striped table-hover">
+									<tbody class="list_wrapper"></tbody>
+								</table>
+							</div>
+							<a href="" class="btn btn-warning cut_btn"><i class="fa fa-cut"></i> Goto target directory and then Paste</a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal fade" id="modal-tool-copy">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+							<h4 class="modal-title">Copy</h4>
+						</div>
+						<div class="modal-body">
+							<div class="table-responsive">
+								<table class="table table-striped table-hover">
+									<tbody class="list_wrapper"></tbody>
+								</table>
+							</div>
+							<a href="" class="btn btn-warning copy_btn"><i class="fa fa-copy"></i> Goto target directory and then Paste</a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal fade" id="modal-tool-paste">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+							<h4 class="modal-title">Paste</h4>
+						</div>
+						<div class="modal-body">
+							<div class="table-responsive">
+								<table class="table table-striped table-hover">
+									<tbody class="list_wrapper"></tbody>
+								</table>
+							</div>
+							<a href="" class="btn btn-warning paste_btn"><i class="fa fa-paste"></i></a>
 						</div>
 					</div>
 				</div>
