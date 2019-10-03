@@ -16,6 +16,10 @@ function path_url_decode($path='')
 	}
 	return implode('/', $out);
 }
+function path_url_link($path='')
+{
+	return str_replace('?', '%3F', $path);	
+}
 
 function FileSizeConvert($bytes)
 {

@@ -150,7 +150,7 @@ if (isset($_POST['open_dir_item_download']))
 						<td><?php echo $value; ?></td>
 						<td>:</td>
 						<td>
-							<a href="<?php echo $output['path_url'].$_POST['open_dir_item_download'].'/'.$value; ?>" class="btn btn-default btn-block" target="_BLANK">
+							<a href="<?php echo path_url_link($output['path_url'].$_POST['open_dir_item_download'].'/'.$value); ?>" class="btn btn-default btn-block" target="_BLANK">
 								<i class="fa fa-download"></i>
 								<?php echo FileSizeConvert(filesize($output['path'].$_POST['open_dir_item_download'].'/'.$value)); ?>
 							</a>
@@ -194,13 +194,13 @@ if (@$_POST['open_item_detail'])
 				<tr>
 					<td>Path</td>
 					<td>:</td>
-					<td><?php echo $output['path_url'].$_POST['open_item_detail']; ?></td>
+					<td><?php echo path_url_link($output['path_url'].$_POST['open_item_detail']); ?></td>
 				</tr>
 				<tr>
 					<td>Download</td>
 					<td>:</td>
 					<td>
-						<a href="<?php echo $output['path_url'].$_POST['open_item_detail']; ?>" class="btn btn-default" target="_BLANK">
+						<a href="<?php echo path_url_link($output['path_url'].$_POST['open_item_detail']); ?>" class="btn btn-default" target="_BLANK">
 							<i class="fa fa-download"></i>
 						</a>
 					</td>
